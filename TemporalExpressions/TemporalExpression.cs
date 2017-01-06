@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace TemporalExpressions
 {
-    public class Program
+    public abstract class TemporalExpression
     {
-        public static void Main(string[] args)
-        {
-        }
+        public abstract bool Includes(DateTime date);
     }
 }
