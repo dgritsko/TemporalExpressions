@@ -4,13 +4,13 @@ namespace TemporalExpressions
 {
     public class DayInMonth : TemporalExpression
     {
-        private int count;
-        private DayOfWeek day;
+        public int Count { get; set; }
+        public DayOfWeek Day { get; set; }
 
         public DayInMonth(int count, DayOfWeek day)
         {
-            this.count = count;
-            this.day = day;
+            this.Count = count;
+            this.Day = day;
         }
 
         public override bool Includes(DateTime date)
@@ -20,25 +20,25 @@ namespace TemporalExpressions
 
         private bool DayMatches(DateTime date)
         {
-            return date.DayOfWeek == this.day;
+            return date.DayOfWeek == this.Day;
         }
 
         private bool WeekMatches(DateTime date)
         {
-            return count > 0
+            return Count > 0
                 ? WeekFromStartMatches(date)
                 : WeekFromEndMatches(date);
         }
 
         private bool WeekFromStartMatches(DateTime date)
         {
-            return this.WeekInMonth(date.Day) == count;
+            return this.WeekInMonth(date.Day) == Count;
         }
 
         private bool WeekFromEndMatches(DateTime date)
         {
             int daysFromMonthEnd = DateTime.DaysInMonth(date.Year, date.Month) - date.Day;
-            return WeekInMonth(daysFromMonthEnd) == Math.Abs(count);
+            return WeekInMonth(daysFromMonthEnd) == Math.Abs(Count);
         }
 
         private int WeekInMonth(int dayNumber)

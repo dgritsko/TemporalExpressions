@@ -54,6 +54,7 @@
   <ItemGroup>
     <Compile Include="DayInMonthTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RangeEachYearTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
