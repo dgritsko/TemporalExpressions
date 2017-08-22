@@ -7,19 +7,19 @@ namespace TemporalExpressions.Parser
 {
     public class Parser
     {
-        public TemporalExpression Parse(string expression)
+        public static TemporalExpression Parse(string expression)
         {
             var noWhitespace = new string(expression.Where(c => !char.IsWhiteSpace(c)).ToArray());
 
             throw new NotImplementedException();
         }
 
-        public TokenizedExpression TokenizeExpression(string expression)
+        public static TokenizedExpression TokenizeExpression(string expression)
         {
             throw new NotImplementedException();
         }
 
-        public List<TokenizedArgument> TokenizeArguments(string arguments)
+        public static List<TokenizedArgument> TokenizeArguments(string arguments)
         {
             var results = new List<string>();
 
@@ -43,15 +43,20 @@ namespace TemporalExpressions.Parser
 
                 if (Util.IsArgumentDelimiter(curr) && depth == 0)
                 {
-                    results.Add(arguments.Substring(argumentStartIndex, i));
+                    results.Add(arguments.Substring(argumentStartIndex, i - argumentStartIndex));
                     argumentStartIndex = i + 1;
                 }
+            }
+
+            if (argumentStartIndex < arguments.Length)
+            {
+                results.Add(arguments.Substring(argumentStartIndex));
             }
 
             return results.Select(TokenizeArgument).ToList();
         }
 
-        public TokenizedArgument TokenizeArgument(string argument)
+        public static TokenizedArgument TokenizeArgument(string argument)
         {
             var index = argument.IndexOf(Util.ArgumentSeparator);
 
