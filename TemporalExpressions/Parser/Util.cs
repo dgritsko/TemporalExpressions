@@ -4,9 +4,9 @@
     {
         public const char ExprStart = '{';
         public const char ExprEnd = '}';
-        public const char ArgumentStart = '(';
-        public const char ArgumentEnd = ')';
-        public const char ArgumentSeparator = ':';
+        public const char ArgumentsStart = '(';
+        public const char ArgumentsEnd = ')';
+        public const char IdentifierSeparator = ':';
         public const char ArgumentDelimiter = ',';
 
         public static bool IsExprStart(char c)
@@ -19,19 +19,19 @@
             return c == ExprEnd;
         }
 
-        public static bool IsArgumentStart(char c)
+        public static bool IsArgumentsStart(char c)
         {
-            return c == ArgumentStart;
+            return c == ArgumentsStart;
         }
 
-        public static bool IsArgumentEnd(char c)
+        public static bool IsArgumentsEnd(char c)
         {
-            return c == ArgumentEnd;
+            return c == ArgumentsEnd;
         }
 
-        public static bool IsArgumentSeparator(char c)
+        public static bool IsIdentifierSeparator(char c)
         {
-            return c == ArgumentSeparator;
+            return c == IdentifierSeparator;
         }
 
         public static bool IsArgumentDelimiter(char c)

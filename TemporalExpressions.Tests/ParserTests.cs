@@ -19,15 +19,24 @@ namespace TemporalExpressions.Tests
             tokenized.Value.Should().Be(expectedValue);
         }
 
-        [TestCase("a:b", 1)]
-        [TestCase("a:b,c:d,e:f", 3)]
-        [TestCase("a:{b(c:d)}", 1)]
-        [TestCase("a:b,c:{d(e:f)},g:{h(i:j)}", 3)]
+        [TestCase("(a:b)", 1)]
+        [TestCase("(a:b,c:d,e:f)", 3)]
+        [TestCase("(a:{b(c:d)})", 1)]
+        [TestCase("(a:b,c:{d(e:f)},g:{h(i:j)})", 3)]
         public void ShouldTokenizeArgumentsCorrectly(string arguments, int expectedCount)
         {
             var tokenized = Parser.Parser.TokenizeArguments(arguments);
 
             tokenized.Count.Should().Be(expectedCount);
+        }
+
+        [TestCase("{a:(b:c)}", "a", 1)]
+        public void ShouldTokenizeExpressionCorrectly(string expression, string expectedIdentifier, int expectedArgumentCount)
+        {
+            var tokenized = Parser.Parser.TokenizeExpression(expression);
+
+            tokenized.Identifier.Should().Be(expectedIdentifier);
+            tokenized.Arguments.Count.Should().Be(expectedArgumentCount);
         }
     }
 }
