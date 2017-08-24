@@ -1,11 +1,14 @@
 ```
-<expression>    ->  { <expr_body> }
-<expr_body>     ->  <identifier>(<arguments>)     // is it possible to have an expression without arguments? if so, use "<identifier> | <identifier> : <arguments> " here instead
+<expression>    ->  {<expr_body>}
+<expr_body>     ->  <identifier>(<arguments>)
 <identifier>    -> [a-z]+
 <arguments>     -> <argument>
                  | <argument>,<arguments>
-<argument>      -> <scalar>
-                 | <expression>
+<argument>      -> <identifier>:<scalar>
+                 | <identifier>:<expression>
+                 | <identifier>:<expressions>
+<expressions>   -> <expression>
+                 | <expression>,<expressions>
 <scalar>        -> [0-9]+
 
 ID: DayInMonth
