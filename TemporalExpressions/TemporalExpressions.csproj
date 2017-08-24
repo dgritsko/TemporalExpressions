@@ -65,6 +65,7 @@
     <Compile Include="Difference.cs" />
     <Compile Include="Intersection.cs" />
     <Compile Include="DayInMonth.cs" />
+    <Compile Include="Parser\Compiler.cs" />
     <Compile Include="Parser\Parser.cs" />
     <Compile Include="Parser\Parts\ArgumentType.cs" />
     <Compile Include="Parser\Parts\TokenizedArgument.cs" />

@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using System;
+using FluentAssertions;
 using NUnit.Framework;
 using TemporalExpressions.Parser.Parts;
 
@@ -30,13 +31,48 @@ namespace TemporalExpressions.Tests
             tokenized.Count.Should().Be(expectedCount);
         }
 
-        [TestCase("{a:(b:c)}", "a", 1)]
+        [TestCase("{a(b:c)}", "a", 1)]
         public void ShouldTokenizeExpressionCorrectly(string expression, string expectedIdentifier, int expectedArgumentCount)
         {
             var tokenized = Parser.Parser.TokenizeExpression(expression);
 
             tokenized.Identifier.Should().Be(expectedIdentifier);
             tokenized.Arguments.Count.Should().Be(expectedArgumentCount);
+        }
+
+        [TestCase("{dayinmonth(count:1,day:sunday)}", 1, DayOfWeek.Sunday)]
+        [TestCase("{dayinmonth(count:5,day:monday)}", 5, DayOfWeek.Monday)]
+        [TestCase("{dayinmonth(count:-1,day:tuesday)}", -1, DayOfWeek.Tuesday)]
+        [TestCase("{dayinmonth(count:2,day:wednesday)}", 2, DayOfWeek.Wednesday)]
+        [TestCase("{dayinmonth(count:1,day:thursday)}", 1, DayOfWeek.Thursday)]
+        [TestCase("{dayinmonth(count:1,day:friday)}", 1, DayOfWeek.Friday)]
+        [TestCase("{dayinmonth(count:1,day:saturday)}", 1, DayOfWeek.Saturday)]
+        public void ShouldParseDayInMonthExpressionCorrectly(string expressionRepresentation, int expectedCount, DayOfWeek expectedDayOfWeek)
+        {
+            var expression = Parser.Parser.Parse(expressionRepresentation);
+
+            var dayInMonthExpression = expression as DayInMonth;
+
+            dayInMonthExpression.Should().NotBeNull();
+
+            dayInMonthExpression.Count.Should().Be(expectedCount);
+            dayInMonthExpression.Day.Should().Be(expectedDayOfWeek);
+        }
+
+        [TestCase("{rangeeachyear(month:1)}", 1, 1, 0, 0)]
+        [TestCase("{rangeeachyear(startmonth:1,endmonth:2)}", 1, 2, 0, 0)]
+        [TestCase("{rangeeachyear(startmonth:1,endmonth:2,startday:3,endday:4)}", 1, 2, 3, 4)]
+        public void ShouldParseRangeEachYearExpressionCorrectly(string expressionRepresentation, int expectedStartMonth, int expectedEndMonth, int expectedStartDay, int expectedEndDay)
+        {
+            var expression = Parser.Parser.Parse(expressionRepresentation);
+
+            var rangeEachYearExpression = expression as RangeEachYear;
+
+            rangeEachYearExpression.Should().NotBeNull();
+            rangeEachYearExpression.StartMonth.Should().Be(expectedStartMonth);
+            rangeEachYearExpression.EndMonth.Should().Be(expectedEndMonth);
+            rangeEachYearExpression.StartDay.Should().Be(expectedStartDay);
+            rangeEachYearExpression.EndDay.Should().Be(expectedEndDay);
         }
     }
 }

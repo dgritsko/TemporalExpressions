@@ -13,16 +13,14 @@ namespace TemporalExpressions.Parser
 
             throw new NotImplementedException();
         }
-
+        
         public static TemporalExpression Parse(string expression)
         {
             var noWhitespace = new string(expression.Where(c => !char.IsWhiteSpace(c)).ToArray());
 
             var tokenized = TokenizeExpression(noWhitespace);
 
-            // TODO: Construct instances of appropriate classes
-            
-            throw new NotImplementedException();
+            return Compiler.Compile(tokenized);
         }
 
         public static TokenizedExpression TokenizeExpression(string expression)
@@ -32,15 +30,15 @@ namespace TemporalExpressions.Parser
                 throw new ParserException($"Expression must begin with {Util.ExprStart} and end with {Util.ExprEnd}");
             }
 
-            var index = expression.IndexOf(Util.IdentifierSeparator);
+            var index = expression.IndexOf(Util.ArgumentsStart);
 
             if (index == -1)
             {
-                throw new ParserException($"Expression must contain identifier separator: {Util.IdentifierSeparator}");
+                throw new ParserException($"Expression must contain arguments");
             }
 
             var identifier = expression.Substring(1, index - 1);
-            var arguments = expression.Substring(index + 1, expression.Length - (index + 2));
+            var arguments = expression.Substring(index, expression.Length - (index + 1));
 
             var tokenizedArguments = TokenizeArguments(arguments);
 
