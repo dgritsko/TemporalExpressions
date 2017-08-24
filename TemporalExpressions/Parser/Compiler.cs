@@ -10,22 +10,23 @@ namespace TemporalExpressions.Parser
         {
             { "dayinmonth", BuildDayInMonth },
             { "rangeeachyear", BuildRangeEachYear },
+            { "difference", BuildDifference },
         };
 
         public static TemporalExpression BuildDayInMonth(TokenizedExpression tokenizedExpression)
         {
-            var count = tokenizedExpression.GetArgument<int>("count");
-            var day = tokenizedExpression.GetArgument<DayOfWeek>("day");
+            var count = tokenizedExpression.GetValueArgument<int>("count");
+            var day = tokenizedExpression.GetValueArgument<DayOfWeek>("day");
             return new DayInMonth(count, day);
         }
 
         public static TemporalExpression BuildRangeEachYear(TokenizedExpression tokenizedExpression)
         {
-            var month = tokenizedExpression.GetArgument<int?>("month");
-            var startMonth = tokenizedExpression.GetArgument<int?>("startmonth");
-            var endMonth = tokenizedExpression.GetArgument<int?>("endmonth");
-            var startDay = tokenizedExpression.GetArgument<int?>("startday");
-            var endDay = tokenizedExpression.GetArgument<int?>("endday");
+            var month = tokenizedExpression.GetValueArgument<int?>("month");
+            var startMonth = tokenizedExpression.GetValueArgument<int?>("startmonth");
+            var endMonth = tokenizedExpression.GetValueArgument<int?>("endmonth");
+            var startDay = tokenizedExpression.GetValueArgument<int?>("startday");
+            var endDay = tokenizedExpression.GetValueArgument<int?>("endday");
 
             if (startMonth.HasValue && endMonth.HasValue && startDay.HasValue && endDay.HasValue)
             {
@@ -43,6 +44,14 @@ namespace TemporalExpressions.Parser
             }
 
             throw new InvalidOperationException();
+        }
+
+        public static TemporalExpression BuildDifference(TokenizedExpression tokenizedExpression)
+        {
+            var included = tokenizedExpression.GetExpressionArgument("included");
+            var excluded = tokenizedExpression.GetExpressionArgument("excluded");
+
+            return new Difference(included, excluded);
         }
 
         public static TemporalExpression Compile(TokenizedExpression tokenized)

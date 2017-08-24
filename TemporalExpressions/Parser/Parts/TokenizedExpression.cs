@@ -9,7 +9,7 @@ namespace TemporalExpressions.Parser.Parts
         public string Identifier { get; set; }
         public List<TokenizedArgument> Arguments { get; set; }
 
-        public T GetArgument<T>(string identifier)
+        public T GetValueArgument<T>(string identifier)
         {
             var argument = Arguments.FirstOrDefault(arg => string.Equals(arg.Identifier, identifier));
             
@@ -36,6 +36,22 @@ namespace TemporalExpressions.Parser.Parts
             }
 
             throw new InvalidOperationException();
+        }
+
+        public TemporalExpression GetExpressionArgument(string identifier)
+        {
+            var tokenized = GetTokenizedExpressionArgument(identifier);
+
+            var compiled = Compiler.Compile(tokenized);
+
+            return compiled;
+        }
+
+        public TokenizedExpression GetTokenizedExpressionArgument(string identifier)
+        {
+            var argument = GetValueArgument<string>(identifier);
+
+            return Parser.TokenizeExpression(argument);
         }
     }
 }

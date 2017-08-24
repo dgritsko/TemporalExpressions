@@ -74,5 +74,15 @@ namespace TemporalExpressions.Tests
             rangeEachYearExpression.StartDay.Should().Be(expectedStartDay);
             rangeEachYearExpression.EndDay.Should().Be(expectedEndDay);
         }
+
+        [TestCase("{difference(included:{rangeeachyear(month:1)},excluded:{rangeeachyear(month:2)})}")]
+        public void ShouldParseDifferenceExpressionCorrectly(string expressionRepresentation)
+        {
+            var expression = Parser.Parser.Parse(expressionRepresentation);
+
+            var differenceExpression = expression as Difference;
+
+            differenceExpression.Should().NotBeNull();
+        }
     }
 }
