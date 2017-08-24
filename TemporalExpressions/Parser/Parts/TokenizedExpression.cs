@@ -40,18 +40,26 @@ namespace TemporalExpressions.Parser.Parts
 
         public TemporalExpression GetExpressionArgument(string identifier)
         {
-            var tokenized = GetTokenizedExpressionArgument(identifier);
+            var argument = GetValueArgument<string>(identifier);
+
+            var tokenized = Parser.TokenizeExpression(argument);
 
             var compiled = Compiler.Compile(tokenized);
 
             return compiled;
         }
 
-        public TokenizedExpression GetTokenizedExpressionArgument(string identifier)
+        public List<TemporalExpression> GetExpressionListArgument(string identifier)
         {
             var argument = GetValueArgument<string>(identifier);
 
-            return Parser.TokenizeExpression(argument);
+            var arguments = Parser.TokenizeListArgument(argument);
+
+            var tokenized = arguments.Select(a => Parser.TokenizeExpression(a.Value)).ToList();
+
+            var compiled = tokenized.Select(Compiler.Compile).ToList();
+
+            return compiled;
         }
     }
 }

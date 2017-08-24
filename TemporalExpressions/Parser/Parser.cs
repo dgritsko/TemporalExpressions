@@ -87,6 +87,11 @@ namespace TemporalExpressions.Parser
             return results.Select(TokenizeArgument).ToList();
         }
 
+        public static List<TokenizedArgument> TokenizeListArgument(string listArgument)
+        {
+            throw new NotImplementedException();
+        }
+
         public static TokenizedArgument TokenizeArgument(string argument)
         {
             var index = argument.IndexOf(Util.IdentifierSeparator);

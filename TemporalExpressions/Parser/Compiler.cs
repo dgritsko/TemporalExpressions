@@ -11,6 +11,7 @@ namespace TemporalExpressions.Parser
             { "dayinmonth", BuildDayInMonth },
             { "rangeeachyear", BuildRangeEachYear },
             { "difference", BuildDifference },
+            { "intersection", BuildIntersection },
         };
 
         public static TemporalExpression BuildDayInMonth(TokenizedExpression tokenizedExpression)
@@ -52,6 +53,13 @@ namespace TemporalExpressions.Parser
             var excluded = tokenizedExpression.GetExpressionArgument("excluded");
 
             return new Difference(included, excluded);
+        }
+
+        public static TemporalExpression BuildIntersection(TokenizedExpression tokenizedExpression)
+        {
+            var elements = tokenizedExpression.GetExpressionListArgument("elements");
+
+            return new Intersection(elements);
         }
 
         public static TemporalExpression Compile(TokenizedExpression tokenized)

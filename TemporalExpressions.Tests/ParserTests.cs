@@ -24,6 +24,7 @@ namespace TemporalExpressions.Tests
         [TestCase("(a:b,c:d,e:f)", 3)]
         [TestCase("(a:{b(c:d)})", 1)]
         [TestCase("(a:b,c:{d(e:f)},g:{h(i:j)})", 3)]
+        [TestCase("(a:{b(c:d)};{e(f:g)})", 1)]
         public void ShouldTokenizeArgumentsCorrectly(string arguments, int expectedCount)
         {
             var tokenized = Parser.Parser.TokenizeArguments(arguments);
@@ -83,6 +84,16 @@ namespace TemporalExpressions.Tests
             var differenceExpression = expression as Difference;
 
             differenceExpression.Should().NotBeNull();
+        }
+
+        [TestCase("{intersection(elements:{rangeeachyear(month:1)};{rangeeachyear(month:1)})}")]
+        public void ShouldParseIntersectionExpressionCorrectly(string expressionRepresentation)
+        {
+            var expression = Parser.Parser.Parse(expressionRepresentation);
+
+            var intersectionExpression = expression as Intersection;
+
+            intersectionExpression.Should().NotBeNull();
         }
     }
 }

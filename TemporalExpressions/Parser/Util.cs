@@ -8,6 +8,7 @@
         public const char ArgumentsEnd = ')';
         public const char IdentifierSeparator = ':';
         public const char ArgumentDelimiter = ',';
+        public const char ListArgumentDelimiter = ';';
 
         public static bool IsExprStart(char c)
         {
@@ -37,6 +38,11 @@
         public static bool IsArgumentDelimiter(char c)
         {
             return c == ArgumentDelimiter;
+        }
+
+        public static bool IsListArgumentDelimiter(char c)
+        {
+            return c == ListArgumentDelimiter;
         }
     }
 }
