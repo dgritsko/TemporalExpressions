@@ -15,7 +15,7 @@ namespace TemporalExpressions.Parser.V2
             ArgumentValue
         }
 
-        public static Dictionary<State, Func<char, State?>> Transitions = new Dictionary<State, Func<char, State?>>()
+        public static Dictionary<State, Func<char?, char, State?>> Transitions = new Dictionary<State, Func<char?, char, State?>>()
         {
             { State.StartExpression, HandleStart },
             //{ State.EndExpression, HandleArgumentValue },
@@ -25,19 +25,19 @@ namespace TemporalExpressions.Parser.V2
             { State.ArgumentValue, HandleArgumentValue },
         };
 
-        public static State? HandleStart(char c)
+        public static State? HandleStart(char? prev, char curr)
         {
-            return Util.IsExprStart(c) ? State.ExpressionIdentifier : (State?)null;
+            return Util.IsExprStart(curr) ? State.ExpressionIdentifier : (State?)null;
         }
 
-        public static State? HandleExpressionIdentifier(char c)
+        public static State? HandleExpressionIdentifier(char? prev, char curr)
         {
-            if (char.IsLetter(c))
+            if (char.IsLetter(curr))
             {
                 return State.ExpressionIdentifier;
             }
 
-            if (Util.IsArgumentsStart(c))
+            if (Util.IsArgumentsStart(curr))
             {
                 return State.Arguments;
             }
@@ -45,9 +45,9 @@ namespace TemporalExpressions.Parser.V2
             return null;
         }
 
-        public static State? HandleArguments(char c)
+        public static State? HandleArguments(char? prev, char curr)
         {
-            if (char.IsLetter(c))
+            if (char.IsLetter(curr))
             {
                 return State.ArgumentIdentifier;
             }
@@ -55,14 +55,14 @@ namespace TemporalExpressions.Parser.V2
             return null;
         }
 
-        public static State? HandleArgumentIdentifier(char c)
+        public static State? HandleArgumentIdentifier(char? prev, char curr)
         {
-            if (char.IsLetter(c))
+            if (char.IsLetter(curr))
             {
                 return State.ArgumentIdentifier;
             }
 
-            if (Util.IsIdentifierSeparator(c))
+            if (Util.IsIdentifierSeparator(curr))
             {
                 return State.ArgumentValue;
             }
@@ -70,34 +70,39 @@ namespace TemporalExpressions.Parser.V2
             return null;
         }
 
-        public static State? HandleArgumentValue(char c)
+        public static State? HandleArgumentValue(char? prev, char curr)
         {
-            if (Util.IsExprStart(c))
+            if (Util.IsExprStart(curr))
             {
                 return State.ExpressionIdentifier;
             }
 
-            if (char.IsLetterOrDigit(c))
+            if (prev.HasValue && Util.IsIdentifierSeparator(prev.Value) && curr == '-')
             {
                 return State.ArgumentValue;
             }
 
-            if (Util.IsArgumentsEnd(c))
+            if (char.IsLetterOrDigit(curr))
             {
                 return State.ArgumentValue;
             }
 
-            if (Util.IsListArgumentDelimiter(c))
+            if (Util.IsArgumentsEnd(curr))
+            {
+                return State.ArgumentValue;
+            }
+
+            if (Util.IsListArgumentDelimiter(curr))
             {
                 return State.StartExpression;
             }
 
-            if (Util.IsExprEnd(c))
+            if (Util.IsExprEnd(curr))
             {
                 return State.EndExpression;
             }
 
-            if (Util.IsArgumentDelimiter(c))
+            if (Util.IsArgumentDelimiter(curr))
             {
                 return State.ArgumentIdentifier;
             }
@@ -111,9 +116,10 @@ namespace TemporalExpressions.Parser.V2
 
             for (var i = 0; i < input.Length; i++)
             {
+                var prev = i == 0 ? (char?) null : input[i - 1];
                 var curr = input[i];
 
-                var nextState = Transitions[state](curr);
+                var nextState = Transitions[state](prev, curr);
 
                 if (nextState.HasValue)
                 {

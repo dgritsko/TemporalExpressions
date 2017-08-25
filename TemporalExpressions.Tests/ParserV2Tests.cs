@@ -1,6 +1,7 @@
 ﻿using System;
 using FluentAssertions;
 using NUnit.Framework;
+using TemporalExpressions.Parser.V2;
 
 namespace TemporalExpressions.Tests
 {
@@ -16,9 +17,7 @@ namespace TemporalExpressions.Tests
         [TestCase("{dayinmonth(count:1,day:saturday)}", 1, DayOfWeek.Saturday)]
         public void ShouldParseDayInMonthExpressionCorrectly(string expressionRepresentation, int expectedCount, DayOfWeek expectedDayOfWeek)
         {
-            var parsed = Parser.V2.Parser.ParseExpression(expressionRepresentation);
-
-            var compiled = Parser.V2.Compiler.Compile(parsed);
+            var compiled = Builder.Build(expressionRepresentation);
 
             var dayInMonthExpression = compiled as DayInMonth;
 
@@ -33,9 +32,7 @@ namespace TemporalExpressions.Tests
         [TestCase("{rangeeachyear(startmonth:1,endmonth:2,startday:3,endday:4)}", 1, 2, 3, 4)]
         public void ShouldParseRangeEachYearExpressionCorrectly(string expressionRepresentation, int expectedStartMonth, int expectedEndMonth, int expectedStartDay, int expectedEndDay)
         {
-            var parsed = Parser.V2.Parser.ParseExpression(expressionRepresentation);
-
-            var compiled = Parser.V2.Compiler.Compile(parsed);
+            var compiled = Builder.Build(expressionRepresentation);
 
             //var rangeEachYearExpression = expression as RangeEachYear;
 
@@ -49,9 +46,7 @@ namespace TemporalExpressions.Tests
         [TestCase("{difference(included:{rangeeachyear(month:1)},excluded:{rangeeachyear(month:2)})}")]
         public void ShouldParseDifferenceExpressionCorrectly(string expressionRepresentation)
         {
-            var parsed = Parser.V2.Parser.ParseExpression(expressionRepresentation);
-
-            var compiled = Parser.V2.Compiler.Compile(parsed);
+            var compiled = Builder.Build(expressionRepresentation);
 
             //var differenceExpression = expression as Difference;
 
@@ -61,9 +56,7 @@ namespace TemporalExpressions.Tests
         [TestCase("{intersection(elements:{rangeeachyear(month:1)};{rangeeachyear(month:1)})}")]
         public void ShouldParseIntersectionExpressionCorrectly(string expressionRepresentation)
         {
-            var parsed = Parser.V2.Parser.ParseExpression(expressionRepresentation);
-
-            var compiled = Parser.V2.Compiler.Compile(parsed);
+            var compiled = Builder.Build(expressionRepresentation);
 
             //var intersectionExpression = expression as Intersection;
 
