@@ -71,6 +71,8 @@
     <Compile Include="Parser\Parts\TokenizedArgument.cs" />
     <Compile Include="Parser\Parts\TokenizedExpression.cs" />
     <Compile Include="Parser\Util.cs" />
+    <Compile Include="Parser\V2\Analyzer.cs" />
+    <Compile Include="Parser\V2\Builder.cs" />
     <Compile Include="Parser\V2\Compiler.cs" />
     <Compile Include="Parser\V2\Components.cs" />
     <Compile Include="Parser\V2\Parser.cs" />

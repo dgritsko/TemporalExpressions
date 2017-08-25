@@ -52,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AnalyzerTests.cs" />
     <Compile Include="DayInMonthTests.cs" />
     <Compile Include="ParserTests.cs" />
     <Compile Include="ParserV2Tests.cs" />
