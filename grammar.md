@@ -10,6 +10,7 @@
 <expressions>   -> <expression>
                  | <expression>,<expressions>
 <scalar>        -> [0-9]+
+                 | [a-z+]
 
 ID: DayInMonth
 Fields: Count (int), Day (int)
