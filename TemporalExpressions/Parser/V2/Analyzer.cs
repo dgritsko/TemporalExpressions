@@ -18,7 +18,7 @@ namespace TemporalExpressions.Parser.V2
         public static Dictionary<State, Func<char?, char, State?>> Transitions = new Dictionary<State, Func<char?, char, State?>>()
         {
             { State.StartExpression, HandleStart },
-            //{ State.EndExpression, HandleArgumentValue },
+            { State.EndExpression, HandleEndExpression },
             { State.ExpressionIdentifier, HandleExpressionIdentifier },
             { State.Arguments, HandleArguments },
             { State.ArgumentIdentifier, HandleArgumentIdentifier },
@@ -109,6 +109,31 @@ namespace TemporalExpressions.Parser.V2
             
             return null;
         }
+
+        public static State? HandleEndExpression(char? prev, char curr)
+        {
+            if (Util.IsArgumentDelimiter(curr))
+            {
+                return State.ArgumentIdentifier;
+            }
+
+            if (Util.IsArgumentsEnd(curr))
+            {
+                return State.EndExpression;
+            }
+
+            if (Util.IsExprEnd(curr))
+            {
+                return State.EndExpression;
+            }
+
+            if (Util.IsListArgumentDelimiter(curr))
+            {
+                return State.StartExpression;
+            }
+
+            return null;
+        }
         
         public static bool Analyze(string input)
         {
@@ -120,6 +145,10 @@ namespace TemporalExpressions.Parser.V2
                 var curr = input[i];
 
                 var nextState = Transitions[state](prev, curr);
+
+#if DEBUG
+                Console.WriteLine($"{input.Substring(0, i)}[{curr}]{input.Substring(i + 1)}");
+#endif
 
                 if (nextState.HasValue)
                 {
