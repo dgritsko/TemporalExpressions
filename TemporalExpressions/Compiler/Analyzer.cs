@@ -144,6 +144,11 @@ namespace TemporalExpressions.Compiler
                 var prev = i == 0 ? (char?) null : input[i - 1];
                 var curr = input[i];
 
+                if (!Transitions.ContainsKey(state))
+                {
+                    throw new ArgumentException($"Unsupported state {state} at position {i}");
+                }
+
                 var nextState = Transitions[state](prev, curr);
 
 #if DEBUG

@@ -17,6 +17,11 @@ namespace TemporalExpressions.Compiler
 
         public static TemporalExpression Build(Expression expression)
         {
+            if (!ExpressionCompilers.ContainsKey(expression.Identifier.Value))
+            {
+                throw new ArgumentException($"Unsupported expression identifier: {expression.Identifier.Value}");
+            }
+
             var expressionCompiler = ExpressionCompilers[expression.Identifier.Value];
 
             return expressionCompiler(expression);
