@@ -1,4 +1,4 @@
-﻿namespace TemporalExpressions.Parser
+﻿namespace TemporalExpressions.Compiler
 {
     public static class Util
     {

@@ -62,20 +62,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Compiler\Components\Argument.cs" />
+    <Compile Include="Compiler\Components\Expression.cs" />
+    <Compile Include="Compiler\Components\ExpressionsArgument.cs" />
+    <Compile Include="Compiler\Components\Identifier.cs" />
+    <Compile Include="Compiler\Components\ScalarArgument.cs" />
+    <Compile Include="Compiler\Identifiers\DayInMonth.cs" />
+    <Compile Include="Compiler\Identifiers\Difference.cs" />
+    <Compile Include="Compiler\Identifiers\Expressions.cs" />
+    <Compile Include="Compiler\Identifiers\Intersection.cs" />
+    <Compile Include="Compiler\Identifiers\RangeEachYear.cs" />
     <Compile Include="Difference.cs" />
     <Compile Include="Intersection.cs" />
     <Compile Include="DayInMonth.cs" />
-    <Compile Include="Parser\Compiler.cs" />
-    <Compile Include="Parser\Parser.cs" />
-    <Compile Include="Parser\Parts\ArgumentType.cs" />
-    <Compile Include="Parser\Parts\TokenizedArgument.cs" />
-    <Compile Include="Parser\Parts\TokenizedExpression.cs" />
-    <Compile Include="Parser\Util.cs" />
-    <Compile Include="Parser\V2\Analyzer.cs" />
-    <Compile Include="Parser\V2\Builder.cs" />
-    <Compile Include="Parser\V2\Compiler.cs" />
-    <Compile Include="Parser\V2\Components.cs" />
-    <Compile Include="Parser\V2\Parser.cs" />
+    <Compile Include="Compiler\Util.cs" />
+    <Compile Include="Compiler\Analyzer.cs" />
+    <Compile Include="Compiler\Builder.cs" />
+    <Compile Include="Compiler\Compiler.cs" />
+    <Compile Include="Compiler\Parser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RangeEachYear.cs" />
     <Compile Include="TemporalExpression.cs" />

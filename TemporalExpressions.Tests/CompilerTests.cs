@@ -1,12 +1,11 @@
 ﻿using System;
 using FluentAssertions;
 using NUnit.Framework;
-using TemporalExpressions.Parser.V2;
 
 namespace TemporalExpressions.Tests
 {
     [TestFixture]
-    public class ParserV2Tests
+    public class CompilerTests
     {
         [TestCase("{dayinmonth(count:1,day:sunday)}", 1, DayOfWeek.Sunday)]
         [TestCase("{dayinmonth(count:5,day:monday)}", 5, DayOfWeek.Monday)]
@@ -15,9 +14,9 @@ namespace TemporalExpressions.Tests
         [TestCase("{dayinmonth(count:1,day:thursday)}", 1, DayOfWeek.Thursday)]
         [TestCase("{dayinmonth(count:1,day:friday)}", 1, DayOfWeek.Friday)]
         [TestCase("{dayinmonth(count:1,day:saturday)}", 1, DayOfWeek.Saturday)]
-        public void ShouldParseDayInMonthExpressionCorrectly(string expressionRepresentation, int expectedCount, DayOfWeek expectedDayOfWeek)
+        public void ShouldCompileDayInMonthExpressionCorrectly(string expressionRepresentation, int expectedCount, DayOfWeek expectedDayOfWeek)
         {
-            var compiled = Builder.Build(expressionRepresentation);
+            var compiled = Compiler.Compiler.Compile(expressionRepresentation);
 
             var dayInMonthExpression = compiled as DayInMonth;
 
@@ -32,35 +31,35 @@ namespace TemporalExpressions.Tests
         [TestCase("{rangeeachyear(startmonth:1,endmonth:2,startday:3,endday:4)}", 1, 2, 3, 4)]
         public void ShouldParseRangeEachYearExpressionCorrectly(string expressionRepresentation, int expectedStartMonth, int expectedEndMonth, int expectedStartDay, int expectedEndDay)
         {
-            var compiled = Builder.Build(expressionRepresentation);
+            var compiled = Compiler.Compiler.Compile(expressionRepresentation);
 
-            //var rangeEachYearExpression = expression as RangeEachYear;
+            var rangeEachYearExpression = compiled as RangeEachYear;
 
-            //rangeEachYearExpression.Should().NotBeNull();
-            //rangeEachYearExpression.StartMonth.Should().Be(expectedStartMonth);
-            //rangeEachYearExpression.EndMonth.Should().Be(expectedEndMonth);
-            //rangeEachYearExpression.StartDay.Should().Be(expectedStartDay);
-            //rangeEachYearExpression.EndDay.Should().Be(expectedEndDay);
+            rangeEachYearExpression.Should().NotBeNull();
+            rangeEachYearExpression.StartMonth.Should().Be(expectedStartMonth);
+            rangeEachYearExpression.EndMonth.Should().Be(expectedEndMonth);
+            rangeEachYearExpression.StartDay.Should().Be(expectedStartDay);
+            rangeEachYearExpression.EndDay.Should().Be(expectedEndDay);
         }
 
         [TestCase("{difference(included:{rangeeachyear(month:1)},excluded:{rangeeachyear(month:2)})}")]
         public void ShouldParseDifferenceExpressionCorrectly(string expressionRepresentation)
         {
-            var compiled = Builder.Build(expressionRepresentation);
+            var compiled = Compiler.Compiler.Compile(expressionRepresentation);
 
-            //var differenceExpression = expression as Difference;
+            var differenceExpression = compiled as Difference;
 
-            //differenceExpression.Should().NotBeNull();
+            differenceExpression.Should().NotBeNull();
         }
 
         [TestCase("{intersection(elements:{rangeeachyear(month:1)};{rangeeachyear(month:1)})}")]
         public void ShouldParseIntersectionExpressionCorrectly(string expressionRepresentation)
         {
-            var compiled = Builder.Build(expressionRepresentation);
+            var compiled = Compiler.Compiler.Compile(expressionRepresentation);
 
-            //var intersectionExpression = expression as Intersection;
+            var intersectionExpression = compiled as Intersection;
 
-            //intersectionExpression.Should().NotBeNull();
+            intersectionExpression.Should().NotBeNull();
         }
     }
 }

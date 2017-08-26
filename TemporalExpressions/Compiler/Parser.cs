@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using TemporalExpressions.Compiler.Components;
 
-namespace TemporalExpressions.Parser.V2
+namespace TemporalExpressions.Compiler
 {
-    using Components;
-
     public static class Parser
     {
         public static Expression ParseExpression(string input)

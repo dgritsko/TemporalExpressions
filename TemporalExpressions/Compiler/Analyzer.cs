@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace TemporalExpressions.Parser.V2
+namespace TemporalExpressions.Compiler
 {
     public static class Analyzer
     {

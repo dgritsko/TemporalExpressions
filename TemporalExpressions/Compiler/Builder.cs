@@ -1,59 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using TemporalExpressions.Compiler.Components;
+using System;
 using System.Linq;
-using TemporalExpressions.Parser.V2.Components;
+using System.Collections.Generic;
 
-namespace TemporalExpressions.Parser.V2
+namespace TemporalExpressions.Compiler
 {
-    namespace Identifiers
-    {
-        public class Expressions
-        {
-            public const string DayInMonth = "dayinmonth";
-            public const string Difference = "difference";
-            public const string Intersection = "intersection";
-            public const string RangeEachYear = "rangeeachyear";
-            public const string Union = "union";
-        }
-
-        public class DayInMonth
-        {
-            public const string Count = "count";
-            public const string Day = "day";
-        }
-
-        public class RangeEachYear
-        {
-            public const string Month = "month";
-            public const string StartMonth = "startmonth";
-            public const string EndMonth = "endmonth";
-            public const string StartDay = "startday";
-            public const string EndDay = "endday";
-        }
-
-        public class Difference
-        {
-            public const string Included = "included";
-            public const string Excluded = "excluded";
-        }
-
-        public class Intersection
-        {
-            public const string Elements = "elements";
-        }
-    }
-
-    public static class Compiler
+    public static class Builder
     {
         public static Dictionary<string, Func<Expression, TemporalExpression>> ExpressionCompilers = new Dictionary<string, Func<Expression, TemporalExpression>>
         {
-            { Identifiers.Expressions.DayInMonth, CompileDayInMonth },
-            { Identifiers.Expressions.RangeEachYear, CompileRangeEachYear },
-            { Identifiers.Expressions.Difference, CompileDifference },
-            { Identifiers.Expressions.Intersection, CompileIntersection },
+            { TemporalExpressions.Compiler.Identifiers.Expressions.DayInMonth, CompileDayInMonth },
+            { TemporalExpressions.Compiler.Identifiers.Expressions.RangeEachYear, CompileRangeEachYear },
+            { TemporalExpressions.Compiler.Identifiers.Expressions.Difference, CompileDifference },
+            { TemporalExpressions.Compiler.Identifiers.Expressions.Intersection, CompileIntersection },
         };
 
-        public static TemporalExpression Compile(Expression expression)
+        public static TemporalExpression Build(Expression expression)
         {
             var expressionCompiler = ExpressionCompilers[expression.Identifier.Value];
 
@@ -62,18 +24,18 @@ namespace TemporalExpressions.Parser.V2
 
         public static TemporalExpression CompileDayInMonth(Expression expression)
         {
-            var count = GetScalarArgument<int>(expression, Identifiers.DayInMonth.Count);
-            var day = GetScalarArgument<DayOfWeek>(expression, Identifiers.DayInMonth.Day);
+            var count = GetScalarArgument<int>(expression, TemporalExpressions.Compiler.Identifiers.DayInMonth.Count);
+            var day = GetScalarArgument<DayOfWeek>(expression, TemporalExpressions.Compiler.Identifiers.DayInMonth.Day);
             return new DayInMonth(count, day);
         }
 
         public static TemporalExpression CompileRangeEachYear(Expression expression)
         {
-            var month = GetScalarArgument<int?>(expression, Identifiers.RangeEachYear.Month);
-            var startMonth = GetScalarArgument<int?>(expression, Identifiers.RangeEachYear.StartMonth);
-            var endMonth = GetScalarArgument<int?>(expression, Identifiers.RangeEachYear.EndMonth);
-            var startDay = GetScalarArgument<int?>(expression, Identifiers.RangeEachYear.StartDay);
-            var endDay = GetScalarArgument<int?>(expression, Identifiers.RangeEachYear.EndDay);
+            var month = GetScalarArgument<int?>(expression, TemporalExpressions.Compiler.Identifiers.RangeEachYear.Month);
+            var startMonth = GetScalarArgument<int?>(expression, TemporalExpressions.Compiler.Identifiers.RangeEachYear.StartMonth);
+            var endMonth = GetScalarArgument<int?>(expression, TemporalExpressions.Compiler.Identifiers.RangeEachYear.EndMonth);
+            var startDay = GetScalarArgument<int?>(expression, TemporalExpressions.Compiler.Identifiers.RangeEachYear.StartDay);
+            var endDay = GetScalarArgument<int?>(expression, TemporalExpressions.Compiler.Identifiers.RangeEachYear.EndDay);
 
             if (startMonth.HasValue && endMonth.HasValue && startDay.HasValue && endDay.HasValue)
             {
@@ -95,20 +57,20 @@ namespace TemporalExpressions.Parser.V2
 
         public static TemporalExpression CompileDifference(Expression expression)
         {
-            var includedExpression = GetExpressionArgument(expression, Identifiers.Difference.Included);
-            var excludedExpression = GetExpressionArgument(expression, Identifiers.Difference.Excluded);
+            var includedExpression = GetExpressionArgument(expression, TemporalExpressions.Compiler.Identifiers.Difference.Included);
+            var excludedExpression = GetExpressionArgument(expression, TemporalExpressions.Compiler.Identifiers.Difference.Excluded);
 
-            var included = Compile(includedExpression);
-            var excluded = Compile(excludedExpression);
+            var included = Build(includedExpression);
+            var excluded = Build(excludedExpression);
 
             return new Difference(included, excluded);
         }
 
         public static TemporalExpression CompileIntersection(Expression expression)
         {
-            var elementsExpressions = GetExpressionsArgument(expression, Identifiers.Intersection.Elements);
+            var elementsExpressions = GetExpressionsArgument(expression, TemporalExpressions.Compiler.Identifiers.Intersection.Elements);
 
-            var elements = elementsExpressions.Select(Compile).ToList();
+            var elements = elementsExpressions.Select(Build).ToList();
 
             return new Intersection(elements);
         }

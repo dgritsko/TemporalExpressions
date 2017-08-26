@@ -1,5 +1,5 @@
 ﻿using NUnit.Framework;
-using TemporalExpressions.Parser.V2;
+using TemporalExpressions.Compiler;
 
 namespace TemporalExpressions.Tests
 {
