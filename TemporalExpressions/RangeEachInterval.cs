@@ -4,11 +4,10 @@ namespace TemporalExpressions
 {
     public class RangeEachInterval : TemporalExpression
     {
-        public int Year { get; set; }
+        private const int DaysInWeek = 7;
+        private const int MonthsInYear = 12;
 
-        public int Month { get; set; }
-
-        public int Day { get; set; }
+        public DateTime Date { get; set; }
 
         public int Count { get; set; }
 
@@ -16,16 +15,52 @@ namespace TemporalExpressions
 
         public RangeEachInterval(int year, int month, int day, int count, UnitOfTime unit)
         {
-            this.Year = year;
-            this.Month = month;
-            this.Day = day;
+            this.Date = new DateTime(year, month, day);
             this.Count = count;
             this.Unit = unit;
         }
 
         public override bool Includes(DateTime date)
         {
-            throw new NotImplementedException();
+            if (date < Date)
+            {
+                return false;
+            }
+
+            int? unitsApart = null;
+
+            var dayDifference = date - Date;
+
+            switch (Unit)
+            {
+                case UnitOfTime.Day:
+                    unitsApart = (int)Math.Round(dayDifference.TotalDays);
+                    break;
+                case UnitOfTime.Week:
+                    unitsApart = (int)Math.Floor(dayDifference.TotalDays / DaysInWeek);
+                    break;
+                case UnitOfTime.Month:
+                    var startMonth = MonthOrdinal(Date);
+                    var endMonth = MonthOrdinal(date);
+
+                    unitsApart = endMonth - startMonth;
+                    break;
+                case UnitOfTime.Year:
+                    unitsApart = date.Year - Date.Year;
+                    break;
+            }
+
+            if (!unitsApart.HasValue)
+            {
+                return false;
+            }
+
+            return unitsApart.Value % Count == 0;
+        }
+
+        private static int MonthOrdinal(DateTime date)
+        {
+            return (date.Year * MonthsInYear) + date.Month;
         }
     }
 }
