@@ -53,24 +53,42 @@ namespace TemporalExpressions.Tests
             differenceExpression.Should().NotBeNull();
         }
 
-        [TestCase("{intersection(elements:{rangeeachyear(month:1)};{rangeeachyear(month:1)})}")]
-        public void ShouldParseIntersectionExpressionCorrectly(string expressionRepresentation)
+        [TestCase("{intersection(elements:{rangeeachyear(month:1)};{rangeeachyear(month:1)})}", 2)]
+        public void ShouldParseIntersectionExpressionCorrectly(string expressionRepresentation, int expectedElements)
         {
             var compiled = Compiler.Compiler.Compile(expressionRepresentation);
 
             var intersectionExpression = compiled as Intersection;
 
             intersectionExpression.Should().NotBeNull();
+
+            intersectionExpression.Elements.Count.Should().Be(expectedElements);
         }
 
-        [TestCase("{union(elements:{rangeeachyear(month:1)};{rangeeachyear(month:1)})}")]
-        public void ShouldParseUnionExpressionCorrectly(string expressionRepresentation)
+        [TestCase("{union(elements:{rangeeachyear(month:1)};{rangeeachyear(month:1)})}", 2)]
+        public void ShouldParseUnionExpressionCorrectly(string expressionRepresentation, int expectedElements)
         {
             var compiled = Compiler.Compiler.Compile(expressionRepresentation);
 
-            var intersectionExpression = compiled as Union;
+            var unionExpression = compiled as Union;
 
-            intersectionExpression.Should().NotBeNull();
+            unionExpression.Should().NotBeNull();
+
+            unionExpression.Elements.Count.Should().Be(expectedElements);
+        }
+
+        [TestCase("{regularinterval(year:2017,month:1,day:1,count:2,unit:day)}", "01/01/17", 2, UnitOfTime.Day)]
+        public void ShouldParseRegularIntervalExpressionCorrectly(string expressionRepresentation, string expectedDate, int expectedCount, UnitOfTime expectedUnit)
+        {
+            var compiled = Compiler.Compiler.Compile(expressionRepresentation);
+
+            var regularIntervalExpression = compiled as RegularInterval;
+
+            regularIntervalExpression.Should().NotBeNull();
+
+            regularIntervalExpression.StartDate.Should().Be(DateTime.Parse(expectedDate));
+            regularIntervalExpression.Count.Should().Be(expectedCount);
+            regularIntervalExpression.Unit.Should().Be(expectedUnit);
         }
 
 

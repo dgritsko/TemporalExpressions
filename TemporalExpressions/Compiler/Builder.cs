@@ -14,6 +14,7 @@ namespace TemporalExpressions.Compiler
             { TemporalExpressions.Compiler.Identifiers.Expressions.Difference, CompileDifference },
             { TemporalExpressions.Compiler.Identifiers.Expressions.Intersection, CompileIntersection },
             { TemporalExpressions.Compiler.Identifiers.Expressions.Union, CompileUnion },
+            { TemporalExpressions.Compiler.Identifiers.Expressions.RegularInterval, CompileRegularInterval },
         };
 
         public static TemporalExpression Build(Expression expression)
@@ -88,6 +89,17 @@ namespace TemporalExpressions.Compiler
             var elements = elementsExpressions.Select(Build).ToList();
 
             return new Union(elements);
+        }
+
+        public static TemporalExpression CompileRegularInterval(Expression expression)
+        {
+            var year = GetScalarArgument<int>(expression, TemporalExpressions.Compiler.Identifiers.RegularInterval.Year);
+            var month = GetScalarArgument<int>(expression, TemporalExpressions.Compiler.Identifiers.RegularInterval.Month);
+            var day = GetScalarArgument<int>(expression, TemporalExpressions.Compiler.Identifiers.RegularInterval.Day);
+
+            var count = GetScalarArgument<int>(expression, TemporalExpressions.Compiler.Identifiers.RegularInterval.Count);
+            var unit = GetScalarArgument<UnitOfTime>(expression, TemporalExpressions.Compiler.Identifiers.RegularInterval.Unit);
+            return new RegularInterval(year, month, day, count, unit);
         }
 
         public static T GetScalarArgument<T>(Expression expression, string identifier)

@@ -1,6 +1,6 @@
 ﻿namespace TemporalExpressions.Compiler.Identifiers
 {
-    public class Intersection
+    public static class Intersection
     {
         public const string Elements = "elements";
     }

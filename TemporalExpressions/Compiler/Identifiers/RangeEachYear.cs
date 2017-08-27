@@ -1,6 +1,6 @@
 ﻿namespace TemporalExpressions.Compiler.Identifiers
 {
-    public class RangeEachYear
+    public static class RangeEachYear
     {
         public const string Month = "month";
         public const string StartMonth = "startmonth";

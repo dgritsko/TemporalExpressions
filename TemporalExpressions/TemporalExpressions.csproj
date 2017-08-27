@@ -72,6 +72,7 @@
     <Compile Include="Compiler\Identifiers\Expressions.cs" />
     <Compile Include="Compiler\Identifiers\Intersection.cs" />
     <Compile Include="Compiler\Identifiers\RangeEachYear.cs" />
+    <Compile Include="Compiler\Identifiers\RegularInterval.cs" />
     <Compile Include="Difference.cs" />
     <Compile Include="Intersection.cs" />
     <Compile Include="DayInMonth.cs" />
@@ -81,7 +82,7 @@
     <Compile Include="Compiler\Compiler.cs" />
     <Compile Include="Compiler\Parser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RangeEachInterval.cs" />
+    <Compile Include="RegularInterval.cs" />
     <Compile Include="RangeEachYear.cs" />
     <Compile Include="Serializer\Serializer.cs" />
     <Compile Include="TemporalExpression.cs" />
