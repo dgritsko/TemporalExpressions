@@ -13,6 +13,7 @@ namespace TemporalExpressions.Compiler
             { TemporalExpressions.Compiler.Identifiers.Expressions.RangeEachYear, CompileRangeEachYear },
             { TemporalExpressions.Compiler.Identifiers.Expressions.Difference, CompileDifference },
             { TemporalExpressions.Compiler.Identifiers.Expressions.Intersection, CompileIntersection },
+            { TemporalExpressions.Compiler.Identifiers.Expressions.Union, CompileUnion },
         };
 
         public static TemporalExpression Build(Expression expression)
@@ -78,6 +79,15 @@ namespace TemporalExpressions.Compiler
             var elements = elementsExpressions.Select(Build).ToList();
 
             return new Intersection(elements);
+        }
+
+        public static TemporalExpression CompileUnion(Expression expression)
+        {
+            var elementsExpressions = GetExpressionsArgument(expression, TemporalExpressions.Compiler.Identifiers.Intersection.Elements);
+
+            var elements = elementsExpressions.Select(Build).ToList();
+
+            return new Union(elements);
         }
 
         public static T GetScalarArgument<T>(Expression expression, string identifier)

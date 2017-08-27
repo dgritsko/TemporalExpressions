@@ -63,6 +63,17 @@ namespace TemporalExpressions.Tests
             intersectionExpression.Should().NotBeNull();
         }
 
+        [TestCase("{union(elements:{rangeeachyear(month:1)};{rangeeachyear(month:1)})}")]
+        public void ShouldParseUnionExpressionCorrectly(string expressionRepresentation)
+        {
+            var compiled = Compiler.Compiler.Compile(expressionRepresentation);
+
+            var intersectionExpression = compiled as Union;
+
+            intersectionExpression.Should().NotBeNull();
+        }
+
+
         [TestCase("{intersection(elements:{intersection(elements:{intersection(elements:{intersection(elements:{intersection(elements:{rangeeachyear(month:1)})})})})})}")]
         public void ShouldParseNestedExpressionCorrectly(string expressionRepresentation)
         {
