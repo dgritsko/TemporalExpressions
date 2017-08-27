@@ -81,10 +81,12 @@
     <Compile Include="Compiler\Compiler.cs" />
     <Compile Include="Compiler\Parser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RangeEachInterval.cs" />
     <Compile Include="RangeEachYear.cs" />
     <Compile Include="Serializer\Serializer.cs" />
     <Compile Include="TemporalExpression.cs" />
     <Compile Include="Union.cs" />
+    <Compile Include="UnitOfTime.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
