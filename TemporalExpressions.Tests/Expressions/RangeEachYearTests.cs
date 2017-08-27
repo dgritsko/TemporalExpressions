@@ -3,7 +3,7 @@ using NUnit.Framework;
 using System;
 using System.Linq;
 
-namespace TemporalExpressions.Tests
+namespace TemporalExpressions.Tests.Expressions
 {
     [TestFixture]
     public class RangeEachYearTests

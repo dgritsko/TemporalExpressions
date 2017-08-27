@@ -53,10 +53,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AnalyzerTests.cs" />
-    <Compile Include="DayInMonthTests.cs" />
+    <Compile Include="Expressions\DifferenceTests.cs" />
+    <Compile Include="Expressions\DayInMonthTests.cs" />
     <Compile Include="CompilerTests.cs" />
+    <Compile Include="Expressions\IntersectionTests.cs" />
+    <Compile Include="Expressions\RangeEachIntervalTests.cs" />
+    <Compile Include="Expressions\UnionTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RangeEachYearTests.cs" />
+    <Compile Include="Expressions\RangeEachYearTests.cs" />
     <Compile Include="SerializerTests.cs" />
   </ItemGroup>
   <ItemGroup>
