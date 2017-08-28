@@ -6,7 +6,7 @@ using NUnit.Framework;
 namespace TemporalExpressions.Tests
 {
     [TestFixture]
-    public class CompilerTests
+    public class SimpleCompilerTests
     {
         [TestCase("{dayinmonth(count:1,day:sunday)}", 1, DayOfWeek.Sunday)]
         [TestCase("{dayinmonth(count:5,day:monday)}", 5, DayOfWeek.Monday)]
@@ -91,25 +91,24 @@ namespace TemporalExpressions.Tests
             regularIntervalExpression.Unit.Should().Be(expectedUnit);
         }
 
-
-        [TestCase("{intersection(elements:{intersection(elements:{intersection(elements:{intersection(elements:{intersection(elements:{rangeeachyear(month:1)})})})})})}")]
-        public void ShouldParseNestedExpressionCorrectly(string expressionRepresentation)
+        [TestCase("{true}")]
+        public void ShouldParseTrueExpressionCorrectly(string expressionRepresentation)
         {
             var compiled = Compiler.Compiler.Compile(expressionRepresentation);
-            
-            compiled.Should().NotBeNull();
 
-            var current = compiled;
-            for (var i = 0; i < 5; i++)
-            {
-                var intersection = current as Intersection;
+            var trueExpression = compiled as True;
 
-                intersection.Should().NotBeNull();
-                intersection.Elements.Count.Should().Be(1);
-                current = intersection.Elements.First();
-            }
+            trueExpression.Should().NotBeNull();
+        }
 
-            current.Should().BeOfType<RangeEachYear>();
+        [TestCase("{false}")]
+        public void ShouldParseFalseExpressionCorrectly(string expressionRepresentation)
+        {
+            var compiled = Compiler.Compiler.Compile(expressionRepresentation);
+
+            var falseExpression = compiled as False;
+
+            falseExpression.Should().NotBeNull();
         }
     }
 }

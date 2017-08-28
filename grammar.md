@@ -1,6 +1,7 @@
 ```
-<expression>    ->  {<expr_body>}
-<expr_body>     ->  <identifier>(<arguments>)
+<expression>    -> {<expr_body>}
+<expr_body>     -> <identifier>
+                 | <identifier>(<arguments>)
 <identifier>    -> [a-z]+
 <arguments>     -> <argument>
                  | <argument>,<arguments>

@@ -74,6 +74,7 @@
     <Compile Include="Compiler\Identifiers\RangeEachYear.cs" />
     <Compile Include="Compiler\Identifiers\RegularInterval.cs" />
     <Compile Include="Difference.cs" />
+    <Compile Include="False.cs" />
     <Compile Include="Intersection.cs" />
     <Compile Include="DayInMonth.cs" />
     <Compile Include="Compiler\Util.cs" />
@@ -86,6 +87,7 @@
     <Compile Include="RangeEachYear.cs" />
     <Compile Include="Serializer\Serializer.cs" />
     <Compile Include="TemporalExpression.cs" />
+    <Compile Include="True.cs" />
     <Compile Include="Union.cs" />
     <Compile Include="UnitOfTime.cs" />
   </ItemGroup>

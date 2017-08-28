@@ -8,5 +8,7 @@
         public const string RangeEachYear = "rangeeachyear";
         public const string Union = "union";
         public const string RegularInterval = "regularinterval";
+        public const string True = "true";
+        public const string False = "false";
     }
 }

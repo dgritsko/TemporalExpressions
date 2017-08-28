@@ -35,10 +35,7 @@ namespace TemporalExpressions.Tests.Expressions
 
                 var initialDate = DateTime.Parse("01/01/17");
 
-                var annualMatches = Enumerable.Range(0, 365)
-                    .Select(x => initialDate.AddDays(x))
-                    .Select(x => expression.Includes(x))
-                    .Sum(x => x ? 1 : 0);
+                var annualMatches = Util.Util.TotalMatches(expression, initialDate, 365);
 
                 annualMatches.Should().Be(12);
             }

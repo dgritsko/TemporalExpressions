@@ -12,11 +12,22 @@ namespace TemporalExpressions.Compiler
 
             var index = expressionBody.IndexOf(Util.ArgumentsStart);
 
-            var identifierInput = expressionBody.Substring(0, index);
-            var argumentsInput = expressionBody.Substring(index, expressionBody.Length - index);
+            Identifier identifier;
+            List<Argument> arguments;
 
-            var identifier = ParseIdentifier(identifierInput);
-            var arguments = ParseArguments(argumentsInput);
+            if (index == -1)
+            {
+                identifier = ParseIdentifier(expressionBody);
+                arguments = new List<Argument>();
+            }
+            else
+            {
+                var identifierInput = expressionBody.Substring(0, index);
+                var argumentsInput = expressionBody.Substring(index, expressionBody.Length - index);
+
+                identifier = ParseIdentifier(identifierInput);
+                arguments = ParseArguments(argumentsInput);
+            }            
 
             return new Expression(identifier, arguments);
         }

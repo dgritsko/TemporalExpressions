@@ -42,6 +42,11 @@ namespace TemporalExpressions.Compiler
                 return State.Arguments;
             }
 
+            if (Util.IsExprEnd(curr))
+            {
+                return State.EndExpression;
+            }
+
             return null;
         }
 
@@ -161,7 +166,7 @@ namespace TemporalExpressions.Compiler
                 }
                 else
                 {
-                    throw new ArgumentException($"Invalid character \"{curr}\" at position {i}");
+                    throw new ArgumentException($"Invalid character \"{curr}\" at position {i} (Current state: {state})");
                 }
             }
 
