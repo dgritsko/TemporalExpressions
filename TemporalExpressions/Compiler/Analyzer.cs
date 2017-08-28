@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using TemporalExpressions.Compiler.Util;
 
 namespace TemporalExpressions.Compiler
 {
@@ -27,7 +28,7 @@ namespace TemporalExpressions.Compiler
 
         public static State? HandleStart(char? prev, char curr)
         {
-            return Util.IsExprStart(curr) ? State.ExpressionIdentifier : (State?)null;
+            return GrammarUtil.IsExprStart(curr) ? State.ExpressionIdentifier : (State?)null;
         }
 
         public static State? HandleExpressionIdentifier(char? prev, char curr)
@@ -37,12 +38,12 @@ namespace TemporalExpressions.Compiler
                 return State.ExpressionIdentifier;
             }
 
-            if (Util.IsArgumentsStart(curr))
+            if (GrammarUtil.IsArgumentsStart(curr))
             {
                 return State.Arguments;
             }
 
-            if (Util.IsExprEnd(curr))
+            if (GrammarUtil.IsExprEnd(curr))
             {
                 return State.EndExpression;
             }
@@ -67,7 +68,7 @@ namespace TemporalExpressions.Compiler
                 return State.ArgumentIdentifier;
             }
 
-            if (Util.IsIdentifierSeparator(curr))
+            if (GrammarUtil.IsIdentifierSeparator(curr))
             {
                 return State.ArgumentValue;
             }
@@ -77,12 +78,12 @@ namespace TemporalExpressions.Compiler
 
         public static State? HandleArgumentValue(char? prev, char curr)
         {
-            if (Util.IsExprStart(curr))
+            if (GrammarUtil.IsExprStart(curr))
             {
                 return State.ExpressionIdentifier;
             }
 
-            if (prev.HasValue && Util.IsIdentifierSeparator(prev.Value) && curr == '-')
+            if (prev.HasValue && GrammarUtil.IsIdentifierSeparator(prev.Value) && curr == '-')
             {
                 return State.ArgumentValue;
             }
@@ -92,22 +93,22 @@ namespace TemporalExpressions.Compiler
                 return State.ArgumentValue;
             }
 
-            if (Util.IsArgumentsEnd(curr))
+            if (GrammarUtil.IsArgumentsEnd(curr))
             {
                 return State.ArgumentValue;
             }
 
-            if (Util.IsListArgumentDelimiter(curr))
+            if (GrammarUtil.IsListArgumentDelimiter(curr))
             {
                 return State.StartExpression;
             }
 
-            if (Util.IsExprEnd(curr))
+            if (GrammarUtil.IsExprEnd(curr))
             {
                 return State.EndExpression;
             }
 
-            if (Util.IsArgumentDelimiter(curr))
+            if (GrammarUtil.IsArgumentDelimiter(curr))
             {
                 return State.ArgumentIdentifier;
             }
@@ -117,22 +118,22 @@ namespace TemporalExpressions.Compiler
 
         public static State? HandleEndExpression(char? prev, char curr)
         {
-            if (Util.IsArgumentDelimiter(curr))
+            if (GrammarUtil.IsArgumentDelimiter(curr))
             {
                 return State.ArgumentIdentifier;
             }
 
-            if (Util.IsArgumentsEnd(curr))
+            if (GrammarUtil.IsArgumentsEnd(curr))
             {
                 return State.EndExpression;
             }
 
-            if (Util.IsExprEnd(curr))
+            if (GrammarUtil.IsExprEnd(curr))
             {
                 return State.EndExpression;
             }
 
-            if (Util.IsListArgumentDelimiter(curr))
+            if (GrammarUtil.IsListArgumentDelimiter(curr))
             {
                 return State.StartExpression;
             }

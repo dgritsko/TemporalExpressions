@@ -1,6 +1,6 @@
-﻿namespace TemporalExpressions.Compiler
+﻿namespace TemporalExpressions.Compiler.Util
 {
-    public static class Util
+    public static class GrammarUtil
     {
         public const char ExprStart = '{';
         public const char ExprEnd = '}';

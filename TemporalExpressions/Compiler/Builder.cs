@@ -2,6 +2,7 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using TemporalExpressions.Compiler.Util;
 
 namespace TemporalExpressions.Compiler
 {
@@ -34,18 +35,18 @@ namespace TemporalExpressions.Compiler
 
         public static TemporalExpression CompileDayInMonth(Expression expression)
         {
-            var count = GetScalarArgument<int>(expression, TemporalExpressions.Compiler.Identifiers.DayInMonth.Count);
-            var day = GetScalarArgument<DayOfWeek>(expression, TemporalExpressions.Compiler.Identifiers.DayInMonth.Day);
+            var count = BuilderUtil.GetScalarArgument<int>(expression, TemporalExpressions.Compiler.Identifiers.DayInMonth.Count);
+            var day = BuilderUtil.GetScalarArgument<DayOfWeek>(expression, TemporalExpressions.Compiler.Identifiers.DayInMonth.Day);
             return new DayInMonth(count, day);
         }
 
         public static TemporalExpression CompileRangeEachYear(Expression expression)
         {
-            var month = GetScalarArgument<int?>(expression, TemporalExpressions.Compiler.Identifiers.RangeEachYear.Month);
-            var startMonth = GetScalarArgument<int?>(expression, TemporalExpressions.Compiler.Identifiers.RangeEachYear.StartMonth);
-            var endMonth = GetScalarArgument<int?>(expression, TemporalExpressions.Compiler.Identifiers.RangeEachYear.EndMonth);
-            var startDay = GetScalarArgument<int?>(expression, TemporalExpressions.Compiler.Identifiers.RangeEachYear.StartDay);
-            var endDay = GetScalarArgument<int?>(expression, TemporalExpressions.Compiler.Identifiers.RangeEachYear.EndDay);
+            var month = BuilderUtil.GetScalarArgument<int?>(expression, TemporalExpressions.Compiler.Identifiers.RangeEachYear.Month);
+            var startMonth = BuilderUtil.GetScalarArgument<int?>(expression, TemporalExpressions.Compiler.Identifiers.RangeEachYear.StartMonth);
+            var endMonth = BuilderUtil.GetScalarArgument<int?>(expression, TemporalExpressions.Compiler.Identifiers.RangeEachYear.EndMonth);
+            var startDay = BuilderUtil.GetScalarArgument<int?>(expression, TemporalExpressions.Compiler.Identifiers.RangeEachYear.StartDay);
+            var endDay = BuilderUtil.GetScalarArgument<int?>(expression, TemporalExpressions.Compiler.Identifiers.RangeEachYear.EndDay);
 
             if (startMonth.HasValue && endMonth.HasValue && startDay.HasValue && endDay.HasValue)
             {
@@ -67,8 +68,8 @@ namespace TemporalExpressions.Compiler
 
         public static TemporalExpression CompileDifference(Expression expression)
         {
-            var includedExpression = GetExpressionArgument(expression, TemporalExpressions.Compiler.Identifiers.Difference.Included);
-            var excludedExpression = GetExpressionArgument(expression, TemporalExpressions.Compiler.Identifiers.Difference.Excluded);
+            var includedExpression = BuilderUtil.GetExpressionArgument(expression, TemporalExpressions.Compiler.Identifiers.Difference.Included);
+            var excludedExpression = BuilderUtil.GetExpressionArgument(expression, TemporalExpressions.Compiler.Identifiers.Difference.Excluded);
 
             var included = Build(includedExpression);
             var excluded = Build(excludedExpression);
@@ -78,7 +79,7 @@ namespace TemporalExpressions.Compiler
 
         public static TemporalExpression CompileIntersection(Expression expression)
         {
-            var elementsExpressions = GetExpressionsArgument(expression, TemporalExpressions.Compiler.Identifiers.Intersection.Elements);
+            var elementsExpressions = BuilderUtil.GetExpressionsArgument(expression, TemporalExpressions.Compiler.Identifiers.Intersection.Elements);
 
             var elements = elementsExpressions.Select(Build).ToList();
 
@@ -87,7 +88,7 @@ namespace TemporalExpressions.Compiler
 
         public static TemporalExpression CompileUnion(Expression expression)
         {
-            var elementsExpressions = GetExpressionsArgument(expression, TemporalExpressions.Compiler.Identifiers.Intersection.Elements);
+            var elementsExpressions = BuilderUtil.GetExpressionsArgument(expression, TemporalExpressions.Compiler.Identifiers.Intersection.Elements);
 
             var elements = elementsExpressions.Select(Build).ToList();
 
@@ -96,12 +97,12 @@ namespace TemporalExpressions.Compiler
 
         public static TemporalExpression CompileRegularInterval(Expression expression)
         {
-            var year = GetScalarArgument<int>(expression, TemporalExpressions.Compiler.Identifiers.RegularInterval.Year);
-            var month = GetScalarArgument<int>(expression, TemporalExpressions.Compiler.Identifiers.RegularInterval.Month);
-            var day = GetScalarArgument<int>(expression, TemporalExpressions.Compiler.Identifiers.RegularInterval.Day);
+            var year = BuilderUtil.GetScalarArgument<int>(expression, TemporalExpressions.Compiler.Identifiers.RegularInterval.Year);
+            var month = BuilderUtil.GetScalarArgument<int>(expression, TemporalExpressions.Compiler.Identifiers.RegularInterval.Month);
+            var day = BuilderUtil.GetScalarArgument<int>(expression, TemporalExpressions.Compiler.Identifiers.RegularInterval.Day);
 
-            var count = GetScalarArgument<int>(expression, TemporalExpressions.Compiler.Identifiers.RegularInterval.Count);
-            var unit = GetScalarArgument<UnitOfTime>(expression, TemporalExpressions.Compiler.Identifiers.RegularInterval.Unit);
+            var count = BuilderUtil.GetScalarArgument<int>(expression, TemporalExpressions.Compiler.Identifiers.RegularInterval.Count);
+            var unit = BuilderUtil.GetScalarArgument<UnitOfTime>(expression, TemporalExpressions.Compiler.Identifiers.RegularInterval.Unit);
             return new RegularInterval(year, month, day, count, unit);
         }
 
@@ -117,54 +118,11 @@ namespace TemporalExpressions.Compiler
 
         public static TemporalExpression CompileNot(Expression expression)
         {
-            var childExpression = GetExpressionArgument(expression, TemporalExpressions.Compiler.Identifiers.Not.Expression);
+            var childExpression = BuilderUtil.GetExpressionArgument(expression, TemporalExpressions.Compiler.Identifiers.Not.Expression);
 
             var child = Build(childExpression);
 
             return new Not(child);
-        }
-
-        public static T GetScalarArgument<T>(Expression expression, string identifier)
-        {
-            var argument = expression.Arguments.OfType<ScalarArgument>().FirstOrDefault(arg => string.Equals(arg.Identifier.Value, identifier));
-
-            if (typeof(T) == typeof(string))
-            {
-                return (T)(object)argument?.Value;
-            }
-
-            if (Nullable.GetUnderlyingType(typeof(T)) == typeof(int))
-            {
-                return argument == null
-                    ? (T)(object)null
-                    : (T)(object)Int32.Parse(argument.Value);
-            }
-
-            if (typeof(T) == typeof(int))
-            {
-                return (T)(object)Int32.Parse(argument?.Value);
-            }
-
-            if (typeof(T).IsEnum)
-            {
-                return (T)Enum.Parse(typeof(T), argument?.Value, true);
-            }
-
-            throw new InvalidOperationException();
-        }
-
-        public static Expression GetExpressionArgument(Expression expression, string identifier)
-        {
-            var argument = expression.Arguments.OfType<ExpressionsArgument>().FirstOrDefault(arg => string.Equals(arg.Identifier.Value, identifier));
-
-            return argument.Expressions.FirstOrDefault();
-        }
-
-        public static List<Expression> GetExpressionsArgument(Expression expression, string identifier)
-        {
-            var argument = expression.Arguments.OfType<ExpressionsArgument>().FirstOrDefault(arg => string.Equals(arg.Identifier.Value, identifier));
-
-            return argument.Expressions;
         }
     }
 }

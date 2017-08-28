@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using TemporalExpressions.Compiler.Components;
+using TemporalExpressions.Compiler.Util;
 
 namespace TemporalExpressions.Compiler
 {
@@ -10,7 +11,7 @@ namespace TemporalExpressions.Compiler
         {
             var expressionBody = input.Substring(1, input.Length - 2);
 
-            var index = expressionBody.IndexOf(Util.ArgumentsStart);
+            var index = expressionBody.IndexOf(GrammarUtil.ArgumentsStart);
 
             Identifier identifier;
             List<Argument> arguments;
@@ -50,17 +51,17 @@ namespace TemporalExpressions.Compiler
             {
                 var curr = argumentsBody[i];
 
-                if (Util.IsExprStart(curr))
+                if (GrammarUtil.IsExprStart(curr))
                 {
                     depth++;
                 }
 
-                if (Util.IsExprEnd(curr))
+                if (GrammarUtil.IsExprEnd(curr))
                 {
                     depth--;
                 }
 
-                if (Util.IsArgumentDelimiter(curr) && depth == 0)
+                if (GrammarUtil.IsArgumentDelimiter(curr) && depth == 0)
                 {
                     argumentInputs.Add(argumentsBody.Substring(index, i - index));
                     index = i + 1;
@@ -77,7 +78,7 @@ namespace TemporalExpressions.Compiler
 
         public static Argument ParseArgument(string input)
         {
-            var argumentComponents = input.Split(new[] { Util.IdentifierSeparator }, 2);
+            var argumentComponents = input.Split(new[] { GrammarUtil.IdentifierSeparator }, 2);
 
             var identifierInput = argumentComponents[0];
             var argumentsInput = argumentComponents[1];
@@ -92,18 +93,18 @@ namespace TemporalExpressions.Compiler
             {
                 var curr = argumentsInput[i];
 
-                if (Util.IsExprStart(curr))
+                if (GrammarUtil.IsExprStart(curr))
                 {
                     isScalar = false;
                     depth++;
                 }
 
-                if (Util.IsExprEnd(curr))
+                if (GrammarUtil.IsExprEnd(curr))
                 {
                     depth--;
                 }
 
-                if (Util.IsListArgumentDelimiter(curr) && depth == 0)
+                if (GrammarUtil.IsListArgumentDelimiter(curr) && depth == 0)
                 {
                     buffer.Add(argumentsInput.Substring(index, i - index));
                     index = i + 1;
