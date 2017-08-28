@@ -17,6 +17,7 @@ namespace TemporalExpressions.Compiler
             { TemporalExpressions.Compiler.Identifiers.Expressions.RegularInterval, CompileRegularInterval },
             { TemporalExpressions.Compiler.Identifiers.Expressions.True, CompileTrue },
             { TemporalExpressions.Compiler.Identifiers.Expressions.False, CompileFalse },
+            { TemporalExpressions.Compiler.Identifiers.Expressions.Not, CompileNot },
         };
 
         public static TemporalExpression Build(Expression expression)
@@ -112,6 +113,15 @@ namespace TemporalExpressions.Compiler
         public static TemporalExpression CompileFalse(Expression expression)
         {
             return new False();
+        }
+
+        public static TemporalExpression CompileNot(Expression expression)
+        {
+            var childExpression = GetExpressionArgument(expression, TemporalExpressions.Compiler.Identifiers.Not.Expression);
+
+            var child = Build(childExpression);
+
+            return new Not(child);
         }
 
         public static T GetScalarArgument<T>(Expression expression, string identifier)

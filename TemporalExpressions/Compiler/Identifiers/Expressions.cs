@@ -10,5 +10,6 @@
         public const string RegularInterval = "regularinterval";
         public const string True = "true";
         public const string False = "false";
+        public const string Not = "not";
     }
 }

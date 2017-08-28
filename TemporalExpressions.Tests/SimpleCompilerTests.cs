@@ -110,5 +110,16 @@ namespace TemporalExpressions.Tests
 
             falseExpression.Should().NotBeNull();
         }
+
+        [TestCase("{not(expression:{true})}")]
+        public void ShouldParseNotExpressionCorrectly(string expressionRepresentation)
+        {
+            var compiled = Compiler.Compiler.Compile(expressionRepresentation);
+
+            var notExpression = compiled as Not;
+
+            notExpression.Should().NotBeNull();
+            notExpression.Expression.Should().NotBeNull();
+        }
     }
 }

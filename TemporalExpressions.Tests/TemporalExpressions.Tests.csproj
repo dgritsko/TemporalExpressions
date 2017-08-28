@@ -56,6 +56,7 @@
     <Compile Include="ComplexCompilerTests.cs" />
     <Compile Include="Expressions\DifferenceTests.cs" />
     <Compile Include="Expressions\DayInMonthTests.cs" />
+    <Compile Include="Expressions\NotTests.cs" />
     <Compile Include="SimpleCompilerTests.cs" />
     <Compile Include="Expressions\FalseTests.cs" />
     <Compile Include="Expressions\IntersectionTests.cs" />
