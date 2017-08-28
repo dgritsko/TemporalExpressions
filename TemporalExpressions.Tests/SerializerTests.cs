@@ -19,7 +19,7 @@ namespace TemporalExpressions.Tests
         [TestCase("{difference(included:{rangeeachyear(month:1)},excluded:{rangeeachyear(month:2)})}")]
         [TestCase("{intersection(elements:{rangeeachyear(month:1)};{rangeeachyear(month:1)})}")]
         [TestCase("{union(elements:{rangeeachyear(month:1)};{rangeeachyear(month:1)})}")]
-        [TestCase("{regularinterval(year:2017,month:1,day:1,count:2,unit:day)}", "01/01/17")]
+        [TestCase("{regularinterval(year:2017,month:1,day:1,count:2,unit:day)}")]
         [TestCase("{true}")]
         [TestCase("{false}")]
         [TestCase("{not(expression:{true})}")]

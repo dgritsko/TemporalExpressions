@@ -9,7 +9,9 @@ namespace TemporalExpressions.Serializer
     {
         public static Dictionary<Type, Action<TemporalExpression, StringBuilder>> Serializers = new Dictionary<Type, Action<TemporalExpression, StringBuilder>>
         {
+            { typeof(DayInMonth), SerializeDayInMonth },
             { typeof(RangeEachYear), SerializeRangeEachYear },
+            { typeof(RegularInterval), SerializeRegularInterval },
             { typeof(True), SerializeTrue },
             { typeof(False), SerializeFalse },
             { typeof(Not), SerializeNot },
@@ -31,22 +33,35 @@ namespace TemporalExpressions.Serializer
             return output.ToString();
         }
 
+        public static void SerializeDayInMonth(TemporalExpression temporalExpression, StringBuilder output)
+        {
+            var dayInMonthExpression = temporalExpression as DayInMonth;
+
+            var arguments = new List<string>()
+                {
+                    BuildArgument(Compiler.Identifiers.DayInMonth.Count, dayInMonthExpression.Count.ToString()),
+                    BuildArgument(Compiler.Identifiers.DayInMonth.Day, dayInMonthExpression.Day.ToString().ToLower()),
+                };
+
+            BuildExpression(Compiler.Identifiers.Expressions.DayInMonth, BuildArgumentList(arguments), output);
+        }
+
         public static void SerializeRangeEachYear(TemporalExpression temporalExpression, StringBuilder output)
         {
-            var expression = temporalExpression as RangeEachYear;
+            var rangeEachYearExpression = temporalExpression as RangeEachYear;
 
-            if (expression.StartMonth == expression.EndMonth && expression.StartDay == 0 && expression.EndDay == 0)
+            if (rangeEachYearExpression.StartMonth == rangeEachYearExpression.EndMonth && rangeEachYearExpression.StartDay == 0 && rangeEachYearExpression.EndDay == 0)
             {
-                var argument = BuildArgument(Compiler.Identifiers.RangeEachYear.Month, expression.StartMonth.ToString());
+                var argument = BuildArgument(Compiler.Identifiers.RangeEachYear.Month, rangeEachYearExpression.StartMonth.ToString());
 
                 BuildExpression(Compiler.Identifiers.Expressions.RangeEachYear, argument, output);
             }
-            else if (expression.StartDay == 0 && expression.EndDay == 0)
+            else if (rangeEachYearExpression.StartDay == 0 && rangeEachYearExpression.EndDay == 0)
             {
                 var arguments = new List<string>()
                 {
-                    BuildArgument(Compiler.Identifiers.RangeEachYear.StartMonth, expression.StartMonth.ToString()),
-                    BuildArgument(Compiler.Identifiers.RangeEachYear.EndMonth, expression.EndMonth.ToString()),
+                    BuildArgument(Compiler.Identifiers.RangeEachYear.StartMonth, rangeEachYearExpression.StartMonth.ToString()),
+                    BuildArgument(Compiler.Identifiers.RangeEachYear.EndMonth, rangeEachYearExpression.EndMonth.ToString()),
                 };
 
                 BuildExpression(Compiler.Identifiers.Expressions.RangeEachYear, BuildArgumentList(arguments), output);
@@ -55,14 +70,30 @@ namespace TemporalExpressions.Serializer
             {
                 var arguments = new List<string>()
                 {
-                    BuildArgument(Compiler.Identifiers.RangeEachYear.StartMonth, expression.StartMonth.ToString()),
-                    BuildArgument(Compiler.Identifiers.RangeEachYear.EndMonth, expression.EndMonth.ToString()),
-                    BuildArgument(Compiler.Identifiers.RangeEachYear.StartDay, expression.StartDay.ToString()),
-                    BuildArgument(Compiler.Identifiers.RangeEachYear.EndDay, expression.EndDay.ToString()),
+                    BuildArgument(Compiler.Identifiers.RangeEachYear.StartMonth, rangeEachYearExpression.StartMonth.ToString()),
+                    BuildArgument(Compiler.Identifiers.RangeEachYear.EndMonth, rangeEachYearExpression.EndMonth.ToString()),
+                    BuildArgument(Compiler.Identifiers.RangeEachYear.StartDay, rangeEachYearExpression.StartDay.ToString()),
+                    BuildArgument(Compiler.Identifiers.RangeEachYear.EndDay, rangeEachYearExpression.EndDay.ToString()),
                 };
 
                 BuildExpression(Compiler.Identifiers.Expressions.RangeEachYear, BuildArgumentList(arguments), output);
             }
+        }
+
+        public static void SerializeRegularInterval(TemporalExpression temporalExpression, StringBuilder output)
+        {
+            var regularIntervalExpression = temporalExpression as RegularInterval;
+
+            var arguments = new List<string>()
+                {
+                    BuildArgument(Compiler.Identifiers.RegularInterval.Year, regularIntervalExpression.StartDate.Year.ToString()),
+                    BuildArgument(Compiler.Identifiers.RegularInterval.Month, regularIntervalExpression.StartDate.Month.ToString()),
+                    BuildArgument(Compiler.Identifiers.RegularInterval.Day, regularIntervalExpression.StartDate.Day.ToString()),
+                    BuildArgument(Compiler.Identifiers.RegularInterval.Count, regularIntervalExpression.Count.ToString()),
+                    BuildArgument(Compiler.Identifiers.RegularInterval.Unit, regularIntervalExpression.Unit.ToString().ToLower()),
+                };
+
+            BuildExpression(Compiler.Identifiers.Expressions.RegularInterval, BuildArgumentList(arguments), output);
         }
 
         public static void SerializeTrue(TemporalExpression temporalExpression, StringBuilder output)
