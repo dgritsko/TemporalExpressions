@@ -88,7 +88,7 @@ namespace TemporalExpressions.Compiler
 
         public static TemporalExpression CompileUnion(Expression expression)
         {
-            var elementsExpressions = BuilderUtil.GetExpressionsArgument(expression, TemporalExpressions.Compiler.Identifiers.Intersection.Elements);
+            var elementsExpressions = BuilderUtil.GetExpressionsArgument(expression, TemporalExpressions.Compiler.Identifiers.Union.Elements);
 
             var elements = elementsExpressions.Select(Build).ToList();
 

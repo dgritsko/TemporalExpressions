@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Text;
 using TemporalExpressions.Compiler.Util;
@@ -12,6 +13,9 @@ namespace TemporalExpressions.Serializer
             { typeof(DayInMonth), SerializeDayInMonth },
             { typeof(RangeEachYear), SerializeRangeEachYear },
             { typeof(RegularInterval), SerializeRegularInterval },
+            { typeof(Difference), SerializeDifference },
+            { typeof(Intersection), SerializeIntersection },
+            { typeof(Union), SerializeUnion },
             { typeof(True), SerializeTrue },
             { typeof(False), SerializeFalse },
             { typeof(Not), SerializeNot },
@@ -96,6 +100,37 @@ namespace TemporalExpressions.Serializer
             BuildExpression(Compiler.Identifiers.Expressions.RegularInterval, BuildArgumentList(arguments), output);
         }
 
+        public static void SerializeDifference(TemporalExpression temporalExpression, StringBuilder output)
+        {
+            var differenceExpression = temporalExpression as Difference;
+
+            var arguments = new List<string>()
+            {
+                BuildArgument(Compiler.Identifiers.Difference.Included, Serialize(differenceExpression.Included)),
+                BuildArgument(Compiler.Identifiers.Difference.Excluded, Serialize(differenceExpression.Excluded)),
+            };
+
+            BuildExpression(Compiler.Identifiers.Expressions.Difference, BuildArgumentList(arguments), output);
+        }
+
+        public static void SerializeIntersection(TemporalExpression temporalExpression, StringBuilder output)
+        {
+            var intersectionExpression = temporalExpression as Intersection;
+
+            var arguments = BuildListArgument(Compiler.Identifiers.Intersection.Elements, intersectionExpression.Elements);
+
+            BuildExpression(Compiler.Identifiers.Expressions.Intersection, arguments, output);
+        }
+
+        public static void SerializeUnion(TemporalExpression temporalExpression, StringBuilder output)
+        {
+            var unionExpression = temporalExpression as Union;
+
+            var arguments = BuildListArgument(Compiler.Identifiers.Union.Elements, unionExpression.Elements);
+
+            BuildExpression(Compiler.Identifiers.Expressions.Union, arguments, output);
+        }
+
         public static void SerializeTrue(TemporalExpression temporalExpression, StringBuilder output)
         {
             BuildExpression(Compiler.Identifiers.Expressions.True, string.Empty, output);
@@ -154,6 +189,21 @@ namespace TemporalExpressions.Serializer
         public static string BuildArgumentList(List<string> arguments)
         {
             return string.Join(GrammarUtil.ArgumentDelimiter.ToString(), arguments);
+        }
+
+        public static string BuildListArgument(string identifier, List<TemporalExpression> expressions)
+        {
+            var builder = new StringBuilder();
+
+            builder.Append(identifier);
+
+            builder.Append(GrammarUtil.IdentifierSeparator);
+
+            var serializedExpressions = expressions.Select(Serialize).ToList();
+
+            builder.Append(string.Join(GrammarUtil.ListArgumentDelimiter.ToString(), serializedExpressions));
+
+            return builder.ToString();
         }
     }
 }

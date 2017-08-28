@@ -74,6 +74,7 @@
     <Compile Include="Compiler\Identifiers\Not.cs" />
     <Compile Include="Compiler\Identifiers\RangeEachYear.cs" />
     <Compile Include="Compiler\Identifiers\RegularInterval.cs" />
+    <Compile Include="Compiler\Identifiers\Union.cs" />
     <Compile Include="Compiler\Util\BuilderUtil.cs" />
     <Compile Include="Difference.cs" />
     <Compile Include="False.cs" />
